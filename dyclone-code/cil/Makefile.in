@@ -218,7 +218,7 @@ $(OBJDIR)/cilversion.ml: configure.in Makefile.in
 # build two libraries
 .PHONY: cillib libcil
 ifeq ($(NATIVECAML),1)
-cillib: $(OBJDIR)/cil.$(CMXA) $(OBJDIR)/libcil.a
+cillib: $(OBJDIR)/cil.$(CMXA) $(OBJDIR)/libcil.so
 else
 cillib: $(OBJDIR)/cil.$(CMXA) 
 endif
@@ -276,11 +276,11 @@ $(OBJDIR)/libperfcount.a: %: %($(OBJDIR)/perfcount.$(CMC))
 # be called from C code; this is like the target above, except
 # it is callable from C instead of from Ocaml
 ifeq ($(NATIVECAML),1)
-$(OBJDIR)/libcil.a: $(OCAML_CIL_LIB_CMODULES:%=$(OBJDIR)/lib%.a) \
+$(OBJDIR)/libcil.so: $(OCAML_CIL_LIB_CMODULES:%=$(OBJDIR)/lib%.a) \
                     $(OCAML_CIL_LIB_MODULES:%=$(OBJDIR)/%.$(CMO))
 	ocamlopt -output-obj -o $@ $(CILLY_LIBS:%=%.cmxa) $^
 else
-$(OBJDIR)/libcil.a:
+$(OBJDIR)/libcil.so:
 	@echo "Can only build $@ when NATIVECAML is 1."
 	exit 2
 endif
